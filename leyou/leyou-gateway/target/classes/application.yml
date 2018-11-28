@@ -1,0 +1,64 @@
+#server:
+#  port: 10010
+#spring:
+#  application:
+#    name: leyou-gateway
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://127.0.0.1:10086/eureka
+#    registry-fetch-interval-seconds: 5 #拉取时间设置为5s（开发的时候节省时间，不设置默认为30秒）
+#    fetch-registry: true #是否拉取服务
+#  instance:
+#    lease-renewal-interval-in-seconds: 5 #心跳时间
+#    lease-expiration-duration-in-seconds: 15
+#zuul:
+#  prefix: /api
+#  routes:
+#    item-service: /item/**
+
+server:
+  port: 10010
+spring:
+    application:
+      name: leyou-gateway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+    fetch-registry: true
+    registry-fetch-interval-seconds: 5
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+
+zuul:
+  prefix: /api
+  routes:
+   item-service: /item/**
+   search-service: /search/**
+   user-service: /user/**
+   auth-service: /auth/**
+   cart-service: /cart/**
+#  ignored-services:
+#    - upload-
+  add-host-header: true #zuul网关转发请求时，携带cookie信息
+  sensitive-headers: #不设置任何敏感头信息
+hystrix:
+  command:
+    execution:
+      isolation:
+        thread:
+          timeoutInMillisecond: 20000 # 熔断超时时长：6000ms
+leyou:
+   jwt:
+     pubKeyPath: C:\\tmp\\rsa\\rsa.pub # 公钥地址
+     cookieName: LY_TOKEN # cookie的名称
+   filter:
+     allowPaths:
+       - /api/auth
+       - /api/search
+       - /api/user/register
+       - /api/user/check
+       - /api/user/code
+       - /api/item
